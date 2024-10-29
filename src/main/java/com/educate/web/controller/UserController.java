@@ -3,6 +3,8 @@ package com.educate.web.controller;
 import com.educate.web.dto.UserDTO;
 import com.educate.web.model.User;
 import com.educate.web.service.UserService;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +22,13 @@ public class UserController {
         return ResponseEntity.ok(registeredUser);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<User> loginUser(@RequestParam String idNumber, @RequestParam String password) {
+    @PostMapping("/getin")
+    public ResponseEntity<User> loginUser(@RequestBody Map<String, String> loginData) {
+        String idNumber = loginData.get("idNumber");
+        String password = loginData.get("password");
+
         User loggedInUser = userService.loginUser(idNumber, password);
-        if (loggedInUser != null) {
-            return ResponseEntity.ok(loggedInUser);
-        }
-        return ResponseEntity.status(401).body(null); // Unauthorized
+        return ResponseEntity.ok(loggedInUser);
     }
+
 }

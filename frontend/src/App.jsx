@@ -18,6 +18,8 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={user ? <Home user={user} /> : <Login onLogin={handleLogin} />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/home" element={<Home />} />
+
                 </Routes>
             </div>
         </Router>

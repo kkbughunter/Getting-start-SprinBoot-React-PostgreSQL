@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 public class UserImpl implements UserService {
-    
+
     @Autowired
     private UserRepo userRepo;
 
@@ -20,17 +20,20 @@ public class UserImpl implements UserService {
         User user = new User();
         user.setFullName(userDTO.getFullName());
         user.setIdNumber(userDTO.getIdNumber());
-        user.setPassword(userDTO.getPassword()); // Consider hashing the password
+        user.setPassword(userDTO.getPassword());
         user.setRole(userDTO.getRole());
         return userRepo.save(user);
     }
 
     @Override
     public User loginUser(String idNumber, String password) {
-        Optional<User> userOptional = userRepo.findByIdNumber(idNumber);
-        if (userOptional.isPresent() && userOptional.get().getPassword().equals(password)) {
-            return userOptional.get();
+        try {
+            return userRepo.findByIdNumber(idNumber)
+                    .filter(user -> user.getPassword().equals(password))
+                    .orElseThrow(() -> new RuntimeException("Invalid idNumber or password"));
+        } catch (Exception e) {
+            throw e;
         }
-        return null; // Handle invalid login attempt
     }
+
 }
